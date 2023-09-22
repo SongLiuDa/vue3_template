@@ -1,7 +1,9 @@
 const { defineConfig } = require('@vue/cli-service')
 const { resolve } = require('path')
+
+const isDev = process.env.NODE_ENV === 'development'
 module.exports = defineConfig({
-  publicPath: '/',
+  publicPath: isDev ? '/' : '/siteverify',
   // 输出文件目录
   outputDir: 'dist',
   // 放置生成的静态资源 (js、css、img、fonts) 的 (相对于 outputDir 的) 目录。

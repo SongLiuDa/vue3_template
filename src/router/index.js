@@ -26,8 +26,10 @@ const routes = [
     redirect: '/404'
   }
 ]
+const isDev = process.env.NODE_ENV === 'development'
+const base = isDev ? '/' : '/siteverify'
 const router = createRouter({
-  history: createWebHistory('/'),
+  history: createWebHistory(base),
   scrollBehavior: () => ({ top: 0 }),
   routes
 })
