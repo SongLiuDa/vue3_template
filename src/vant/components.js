@@ -1,0 +1,41 @@
+import {
+  Button,
+  Form,
+  Field,
+  RadioGroup,
+  Radio,
+  Col,
+  Row,
+  Checkbox,
+  CheckboxGroup,
+  Picker,
+  Popup,
+  Uploader,
+  Icon,
+  Loading,
+  Dialog,
+  NoticeBar,
+  Cell,
+  CellGroup
+} from 'vant'
+
+export const components = [
+  Button,
+  Form,
+  Field,
+  RadioGroup,
+  Radio,
+  Col,
+  Row,
+  Checkbox,
+  CheckboxGroup,
+  Picker,
+  Popup,
+  Uploader,
+  Icon,
+  Loading,
+  Dialog.Component,
+  NoticeBar,
+  Cell,
+  CellGroup
+]

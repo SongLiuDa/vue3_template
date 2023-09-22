@@ -1,0 +1,49 @@
+.app-form{
+  .van-cell{
+    padding: 0;
+    &::after{
+      display: none;
+    }
+    .van-field__body{
+      height: .84rem;
+      line-height: .84rem;
+      border-radius: .1rem;
+      font-size: .28rem;
+      caret-color: $blue;
+      transition: border-color .2s cubic-bezier(.645,.045,.355,1);
+      border:.01rem solid $colorCc;
+      // overflow: visible;
+      .van-field__control--custom{
+        padding: 0;
+      }
+    }
+    .van-field__control{
+      border-radius: inherit;
+      color: $color66 !important;
+      padding: 0 .4rem;
+      &::-webkit-input-placeholder{
+        color:$colorCc;
+        font-size: .28rem;
+      }
+    }
+    &.van-field--error{
+      .van-field__body{
+        border-color: $red;
+      }
+    }
+    &.custom-field{ // van-field #input
+      .van-field__body{
+        background: transparent;
+        border-radius: 0;
+        border: none;
+        height: auto;
+      }
+    }
+    .van-field__error-message{
+      font-size: .24rem;
+      line-height: .32rem;
+      padding-top: .12rem;
+      color: $red;
+    }
+  }
+}
