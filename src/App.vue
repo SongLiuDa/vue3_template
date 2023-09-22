@@ -6,6 +6,16 @@
   </div>
 </template>
 
+<script setup>
+// import { computed } from 'vue'
+// import { getToken } from '@/utils/auth'
+// import { useRoute } from 'vue-router'
+// const route = useRoute()
+// const urlSign = computed(() => route.query.urlSign)
+// if ( urlSign !== getToken() ){
+
+// }
+</script>
 <script>
 export default {
   name: 'App'

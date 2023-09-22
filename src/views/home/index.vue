@@ -17,9 +17,9 @@
     </van-notice-bar>
     <div class="content">
       <van-cell-group>
-        <van-cell title="客户代码" value="内容" />
-        <van-cell title="客户名称" value="内容" />
-        <van-cell title="开通方式" value="内容" />
+        <van-cell title="客户代码" :value="userStore._profile.custId" />
+        <van-cell title="客户名称" :value="userStore._profile.realName" />
+        <van-cell title="开通方式" :value="openMethodEnum[userStore._profile.openMethod]" />
       </van-cell-group>
       <AppForm
         :form-config="formConfig"
@@ -48,9 +48,11 @@
 <script setup>
 import AppHeader from '@/components/header'
 import { Dialog } from 'vant'
-import { formConfig } from './config'
+import { formConfig, openMethodEnum } from './config'
 import { computed, onMounted, reactive, ref } from 'vue'
+import { useUser } from '@/store'
 import { useRouter } from 'vue-router'
+const userStore = useUser()
 const router = useRouter()
 
 const formIsDisabled = computed(() => false)

@@ -1,4 +1,4 @@
-import { getToken } from '@/utils/auth'
+import { getToken, getPasswod } from '@/utils/auth'
 import router from '@/router'
 import { useUser } from '@/store'
 import { Toast } from 'vant'
@@ -17,10 +17,15 @@ router.beforeEach(async(to, from) => {
         return true
       } else {
         try {
-          await userStore.getProfile()
+          const params = {
+            viewPassword: getPasswod(),
+            urlSign: getToken()
+          }
+          await userStore.login(params)
           return true
         } catch {
-          Toast.fail('Please log in again')
+          userStore.resetToken()
+          Toast.fail('请重新登录')
           return '/login'
         }
       }

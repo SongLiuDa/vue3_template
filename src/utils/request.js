@@ -1,5 +1,4 @@
 import axios from 'axios'
-import { getToken } from '@/utils/auth'
 import { Notify } from 'vant'
 
 const isDev = process.env.NODE_ENV === 'development'
@@ -14,9 +13,6 @@ const http = axios.create({
 // 请求拦截
 http.interceptors.request.use(
   (config) => {
-    if (getToken()) {
-      config.headers.Authorization = getToken()
-    }
     // console.log('准备请求了', config)
     return config
   },

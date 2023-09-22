@@ -15,6 +15,14 @@ function chooseTheDoor(form) {
   return form.methods === 'Y'
 }
 
+export const openMethodEnum = {
+  SameBizCollPlat: '同业收款平台用户',
+  Alibaba: '阿里巴巴国际站Verified用户',
+  WholesaleMarket: '标准批发市场用户',
+  SinosureCustomer: '信保用户',
+  HistoryECommerce: '历史电商合作用户'
+}
+
 const uploadRules = [
   {
     validator: (value) => {

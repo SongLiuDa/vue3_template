@@ -17,7 +17,7 @@
               访问密码
             </div>
             <div class="form-item">
-              <AppPasswordInput v-model="dataForm.userName" />
+              <AppPasswordInput v-model="dataForm.viewPassword" placeholder="请输入访问密码" />
             </div>
           </div>
           <div class="submit">
@@ -39,15 +39,18 @@
 
 <script setup>
 import AppHeader from '@/components/header'
-import { reactive, ref } from 'vue'
+import { computed, reactive, ref } from 'vue'
 import { useUser } from '@/store'
-import { useRouter } from 'vue-router'
+import { useRoute, useRouter } from 'vue-router'
 const userStore = useUser()
 const router = useRouter()
+const route = useRoute()
+
+const urlSign = computed(() => route.query.urlSign)
 const show = ref(true)
 const dataForm = reactive({
-  userName: '13800139020',
-  verifyCode: '123'
+  viewPassword: undefined,
+  urlSign: urlSign.value
 })
 
 const sLoading = ref(false)
