@@ -12,23 +12,21 @@ function isWholesaleMarket(form) {
 }
 // 选择上门
 function chooseTheDoor(form) {
-  return form.methods === 'Y'
+  return form.goSiteVerify === 'Y'
 }
 
 export const openMethodEnum = {
-  SameBizCollPlat: '同业收款平台用户',
-  Alibaba: '阿里巴巴国际站Verified用户',
-  WholesaleMarket: '标准批发市场用户',
-  SinosureCustomer: '信保用户',
-  HistoryECommerce: '历史电商合作用户'
+  WholesaleMarket: '绿通-标准批发市场用户',
+  Standard: '普通客户'
 }
 
 const uploadRules = [
   {
     validator: (value) => {
+      const list = value.filter(item => item.status === 'done')
       if (!value.length) {
         return '必填'
-      } else if (value.length < 3) {
+      } else if (list.length < 3) {
         return '至少上传3张照片'
       } else {
         return Promise.resolve()
@@ -41,7 +39,7 @@ const uploadRules = [
 export const formConfig = [
   {
     tag: 'radio',
-    prop: 'methods',
+    prop: 'goSiteVerify',
     itemAttrs: {
       mt: true,
       mb: true
@@ -61,7 +59,7 @@ export const formConfig = [
   },
   {
     tag: 'upload',
-    prop: 'a1',
+    prop: 'groupPhotoFile',
     itemAttrs: {
       label: '销售与客户企业logo合影'
     },
@@ -71,7 +69,7 @@ export const formConfig = [
   },
   {
     tag: 'upload',
-    prop: 'a2',
+    prop: 'positionFile',
     itemAttrs: {
       label: '企业外出拍照打卡',
       labelTipsSlot: 'goOutSlot'
@@ -82,7 +80,7 @@ export const formConfig = [
   },
   {
     tag: 'upload',
-    prop: 'a3',
+    prop: 'envFile',
     itemAttrs: {
       label: '客户办公场所室内拍照',
       labelTipsSlot: 'officeSlot',
@@ -98,7 +96,7 @@ export const formConfig = [
   },
   {
     tag: 'upload',
-    prop: 'a4',
+    prop: 'positionFile',
     itemAttrs: {
       label: '门头照片'
     },
@@ -108,7 +106,7 @@ export const formConfig = [
   },
   {
     tag: 'upload',
-    prop: 'a5',
+    prop: 'envFile',
     itemAttrs: {
       label: '店铺环境照片',
       labelTipsSlot: 'storeSlot'
@@ -123,7 +121,7 @@ export const formConfig = [
   },
   {
     tag: 'upload',
-    prop: 'a6',
+    prop: 'groupPhotoFile',
     itemAttrs: {
       label: '销售与店铺老板合照照片',
       mb: true
@@ -133,7 +131,7 @@ export const formConfig = [
     }
   },
   {
-    prop: 'B4',
+    prop: 'remarks',
     attrs: {
       fieldLabel: '备注',
       placeholder: '请输入备注'

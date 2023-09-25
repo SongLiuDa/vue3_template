@@ -39,7 +39,7 @@ router.beforeEach(async(to, from) => {
     if (whiteList.indexOf(to.name) !== -1) {
       return true
     } else {
-      return '/login?urlSign=' + urlSign(to)
+      return '/login?sign=' + urlSign(to)
     }
   }
 })

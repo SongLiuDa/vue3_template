@@ -26,7 +26,8 @@ export const confirmRules = [
 export const uploadRules = [
   {
     validator: (value) => {
-      if ((Array.isArray(value) && !value.length) || !value) {
+      const isPass = value.every(item => item.status === 'done')
+      if (!isPass || !value.length) {
         return '必填'
       } else {
         return Promise.resolve()

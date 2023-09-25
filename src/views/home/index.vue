@@ -17,7 +17,7 @@
           />
           <span>提交成功</span>
         </div>
-        <p class="notice-tips">请耐心等待，您提交/驳回的实地核实信息正在审核中...</p>
+        <p class="notice-tips">请耐心等待，您提交的实地核实信息正在审核中...</p>
       </template>
       <!-- 通过 -->
       <template v-if="userStore._profile.status === 'PASS'">
@@ -44,7 +44,13 @@
         <p class="notice-tips">{{ userStore._profile.authRemark }}</p>
       </template>
     </van-notice-bar>
-    <div class="content">
+    <van-loading
+      v-if="loading"
+      class="loading"
+      size="24px"
+      vertical
+    >加载中...</van-loading>
+    <div v-else class="content">
       <van-cell-group>
         <van-cell title="客户代码" :value="userStore._profile.custId" />
         <van-cell title="客户名称" :value="userStore._profile.realName" />
@@ -85,16 +91,21 @@ import { Dialog } from 'vant'
 import { formConfig, openMethodEnum } from './config'
 import { computed, onMounted, reactive, ref } from 'vue'
 import { useUser } from '@/store'
-import { useRouter } from 'vue-router'
+import { useRouter, useRoute } from 'vue-router'
+import { getSiteVerify, siteVerify } from '@api/home'
 const userStore = useUser()
 const router = useRouter()
+const route = useRoute()
 
 const formIsDisabled = computed(() => false)
+const sign = computed(() => route.query.sign)
 
 const dataForm = reactive({
-  methods: undefined,
-  a3: [],
-  a5: [],
+  goSiteVerify: undefined, // Y:上门 N：放弃上门
+  envFile: [], // 实地环境圈「普客：办公场所室内照、批发市场：店铺环境照】
+  groupPhotoFile: [], // 合照图片【普客：与1og0合影、批发市场：与店铺老板合照】
+  positionFile: [], // 位置照片【普客：外出打卡照，批发市场：门头照】
+  remarks: undefined,
   openMethods: userStore._profile.openMethod // 业务开通方式【WholesaleMarket:绿通-批发市场、Standard:普通客户】
 })
 
@@ -102,10 +113,18 @@ const sLoading = ref(false)
 function beforeClose(action) {
   return new Promise((resolve) => {
     if (action === 'confirm') {
-      setTimeout(() => {
-        router.push('/succ')
-        resolve(true)
-      }, 1000)
+      sLoading.value = true
+      const params = {
+        urlSign: sign.value,
+        ...dataForm
+      }
+      siteVerify(params).then(res => {
+        // console.log('提交', res)
+        sLoading.value = false
+      }).catch(() => {
+        sLoading.value = false
+      })
+      router.push('/succ')
     } else {
       resolve(true)
     }
@@ -122,10 +141,33 @@ function onSubmit() {
     return true
   })
 }
+const loading = ref(false)
+function siteVerifyDetail() {
+  loading.value = true
+  const params = {
+    urlSign: sign.value
+  }
+  getSiteVerify(params).then(res => {
+    // console.log('详情', res)
+    const { envFile, groupPhotoFile, positionFile, remarks } = res.sitePic
+    dataForm.goSiteVerify = res.goSiteVerify
+    dataForm.envFile = envFile
+    dataForm.groupPhotoFile = groupPhotoFile
+    dataForm.positionFile = positionFile
+    dataForm.remarks = remarks
+    loading.value = false
+  }).catch(() => {
+    loading.value = false
+  })
+}
+
 onMounted(() => {
   // 绿色通道类型
   if (dataForm.openMethods === 'WholesaleMarket') {
-    dataForm.methods = 'Y'
+    dataForm.goSiteVerify = 'Y'
+  }
+  if (userStore._profile.status !== 'CREATED') {
+    siteVerifyDetail()
   }
 })
 
@@ -135,6 +177,9 @@ onMounted(() => {
 export default { name: 'Home' }
 </script>
 <style scoped lang="scss">
+.loading{
+  margin-top: 2rem;
+}
 .notice-tips{
   margin-left: .46rem;
 }

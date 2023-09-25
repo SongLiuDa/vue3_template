@@ -16,7 +16,8 @@ import {
   Dialog,
   NoticeBar,
   Cell,
-  CellGroup
+  CellGroup,
+  Skeleton
 } from 'vant'
 
 export const components = [
@@ -37,5 +38,6 @@ export const components = [
   Dialog.Component,
   NoticeBar,
   Cell,
-  CellGroup
+  CellGroup,
+  Skeleton
 ]

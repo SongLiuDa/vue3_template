@@ -1,6 +1,5 @@
 <template>
   <van-field
-    :model-value="maxCount > 1 ? modelValue.join() : modelValue"
     :rules="rules"
     class="custom-field app-upload"
   >
@@ -8,6 +7,7 @@
       <van-uploader
         v-model="fileList"
         v-bind="$attrs"
+        :multiple="maxCount > 1"
         :max-size="maxSize"
         :max-count="maxCount"
         :preview-full-image="false"
@@ -19,14 +19,14 @@
 </template>
 
 <script setup>
-import { ref, computed, toRefs, watchEffect } from 'vue'
+import { ref, watchEffect } from 'vue'
 import { uploadRules } from '@/utils/rules'
 import { Notify } from 'vant'
 import { phoneFileType } from './config'
 import { upload, getUpload } from '@api/base'
 
 const props = defineProps({
-  modelValue: [String, Array],
+  modelValue: Array,
   rules: {
     type: Array,
     default: () => uploadRules
@@ -46,7 +46,6 @@ const props = defineProps({
 })
 const emit = defineEmits(['update:modelValue'])
 function emitInput (val) {
-  console.log(val)
   emit('update:modelValue', val)
 }
 const fileList = ref([])
@@ -68,22 +67,32 @@ function getFile() {
   })
 }
 
-const haveUrl = computed(() => (props.maxCount > 1 && props.modelValue.length) || (+props.maxCount === 1 && props.modelValue))
-const { modelValue } = toRefs(props)
 watchEffect(() => {
-  if (haveUrl.value) {
+  if (props.modelValue.length) {
     getFile()
   }
 })
 // 上传前处理
 function handleAfter(data) {
-  const { size, type } = data.file
-  if (size > props.maxSize) {
+  const sizeList = []
+  const typeList = []
+  if (Array.isArray(data)) {
+    data.forEach(item => {
+      sizeList.push(item.file.size)
+      typeList.push(item.file.type)
+    })
+  } else {
+    sizeList.push(data.file.size)
+    typeList.push(data.file.type)
+  }
+  const sizeLimit = sizeList.some(size => size > props.maxSize)
+  if (sizeLimit) {
     Notify('图片上传不能超过10M')
     return false
   }
-  const allowType = props.fileType.some(item => item.type === type)
-  if (!allowType) {
+  const typeLimit = typeList.some(type => props.fileType.includes(type))
+
+  if (!typeLimit) {
     Notify('你上传的图片格式不正确，请上传JPG/JPEG/PNG格式的图片')
     return false
   }
@@ -94,12 +103,7 @@ function handleAfter(data) {
   upload(imgFile).then(res => {
     // console.log('文件上传回调', res)
     const { fileId } = res
-    if (props.maxCount > 1) {
-      const list = [...props.modelValue, fileId]
-      emitInput(list)
-    } else {
-      emitInput(fileId)
-    }
+    emitInput(fileId)
   }).catch(() => {
     data.status = 'failed'
     data.message = '上传失败'
@@ -107,15 +111,11 @@ function handleAfter(data) {
 }
 // 删除
 function handleDelete(file) {
-  if (props.maxCount > 1) {
-    const { fileId } = file
-    const list = [...props.modelValue]
-    const index = list.findIndex(v => v === fileId)
-    list.splice(index, 1)
-    emitInput(list)
-  } else {
-    emitInput()
-  }
+  const { fileId } = file
+  const list = [...props.modelValue]
+  const index = list.findIndex(v => v === fileId)
+  list.splice(index, 1)
+  emitInput(list)
 }
 </script>
 
