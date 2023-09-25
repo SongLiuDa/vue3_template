@@ -50,20 +50,21 @@ function emitInput (val) {
 }
 const fileList = ref([])
 function getFile() {
-  const params = {
-    fileId: props.modelValue
-  }
-  getUpload(params).then(res => {
-    // console.log('获取文件', res)
-    const { content } = res
-    fileList.value = content.map(item => ({
-      url: item.fileUrl,
-      name: item.fileName,
-      fileId: item.fileId,
-      status: 'done'
-    }))
-  }).catch(() => {
-
+  props.modelValue.forEach(item => {
+    console.log(item)
+    const params = {
+      id: item
+    }
+    getUpload(params).then(res => {
+      console.log('获取文件', res)
+    // const { content } = res
+    // fileList.value = content.map(item => ({
+    //   url: item.fileUrl,
+    //   name: item.fileName,
+    //   fileId: item.fileId,
+    //   status: 'done'
+    // }))
+    })
   })
 }
 
@@ -102,8 +103,9 @@ function handleAfter(data) {
   imgFile.append('file', data.file)
   upload(imgFile).then(res => {
     // console.log('文件上传回调', res)
-    const { fileId } = res
-    emitInput(fileId)
+    const { file_id } = res
+    const list = [...props.modelValue, file_id]
+    emitInput(list)
   }).catch(() => {
     data.status = 'failed'
     data.message = '上传失败'
