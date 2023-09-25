@@ -23,7 +23,9 @@ import { ref, watchEffect } from 'vue'
 import { uploadRules } from '@/utils/rules'
 import { Notify } from 'vant'
 import { phoneFileType } from './config'
+import { useUser } from '@/store'
 import { upload, getUpload } from '@api/base'
+const userStore = useUser()
 
 const props = defineProps({
   modelValue: Array,
@@ -53,7 +55,8 @@ function getFile() {
   props.modelValue.forEach(item => {
     console.log(item)
     const params = {
-      id: item
+      cust_id: userStore._profile.custId,
+      file_id: item
     }
     getUpload(params).then(res => {
       console.log('获取文件', res)
