@@ -1,9 +1,9 @@
 import axios from 'axios'
 import { Notify } from 'vant'
 
-const isDev = process.env.NODE_ENV === 'development'
+// const isDev = process.env.NODE_ENV === 'development'
 const http = axios.create({
-  baseURL: isDev ? '/my_api' : process.env.VUE_APP_BASE_API,
+  baseURL: process.env.VUE_APP_BASE_API,
   // timeout: 15000,
   headers: {
     'Content-Type': 'application/json'
