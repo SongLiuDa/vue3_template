@@ -53,7 +53,6 @@ function emitInput (val) {
 const fileList = ref([])
 function getFile() {
   props.modelValue.forEach(item => {
-    console.log(item)
     const params = {
       cust_id: userStore._profile.custId,
       file_id: item
@@ -104,6 +103,7 @@ function handleAfter(data) {
   data.status = 'uploading'
   data.message = '上传中...'
   imgFile.append('file', data.file)
+  imgFile.append('cust_id', userStore._profile.custId)
   upload(imgFile).then(res => {
     // console.log('文件上传回调', res)
     const { file_id } = res
