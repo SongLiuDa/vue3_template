@@ -1,24 +1,58 @@
 <template>
   <div class="home">
     <AppHeader />
+    <!-- 非初始化 -->
     <van-notice-bar
+      v-if="userStore._profile.status !== 'CREATED'"
       wrapable
       :scrollable="false"
     >
-      <div class="title w500 flex-c">
-        <van-icon
-          name="warning"
-          size=".36rem"
-          class="mr10"
-        />
-        <span>驳回原因：</span>
-      </div>
-      <p class="notice-tips">驳回原因.....</p>
+      <!-- 审核中 -->
+      <template v-if="userStore._profile.status === 'AUDITING'">
+        <div class="title w500 flex-c">
+          <van-icon
+            name="warning"
+            size=".36rem"
+            class="mr10"
+          />
+          <span>提交成功</span>
+        </div>
+        <p class="notice-tips">请耐心等待，您提交/驳回的实地核实信息正在审核中...</p>
+      </template>
+      <!-- 通过 -->
+      <template v-if="userStore._profile.status === 'PASS'">
+        <div class="title w500 flex-c">
+          <van-icon
+            name="checked"
+            size=".36rem"
+            class="mr10"
+          />
+          <span>审核通过</span>
+        </div>
+        <p class="notice-tips">您提交的实地核实信息已审核通过，无需再进行操作</p>
+      </template>
+      <!-- 驳回 -->
+      <template v-if="userStore._profile.status === 'REFUSE'">
+        <div class="title w500 flex-c">
+          <van-icon
+            name="warning"
+            size=".36rem"
+            class="mr10"
+          />
+          <span>驳回原因：</span>
+        </div>
+        <p class="notice-tips">{{ userStore._profile.authRemark }}</p>
+      </template>
     </van-notice-bar>
     <div class="content">
       <van-cell-group>
         <van-cell title="客户代码" :value="userStore._profile.custId" />
         <van-cell title="客户名称" :value="userStore._profile.realName" />
+        <van-cell
+          v-if="userStore._profile.bizActualAddress"
+          title="客户地址"
+          :value="userStore._profile.bizActualAddress"
+        />
         <van-cell title="开通方式" :value="openMethodEnum[userStore._profile.openMethod]" />
       </van-cell-group>
       <AppForm
@@ -61,8 +95,7 @@ const dataForm = reactive({
   methods: undefined,
   a3: [],
   a5: [],
-  vipChannelType: '1', // 绿色通道类型
-  vipChannel: 'N' // 是否绿色渠道[Y:是 N:否]
+  openMethods: userStore._profile.openMethod // 业务开通方式【WholesaleMarket:绿通-批发市场、Standard:普通客户】
 })
 
 const sLoading = ref(false)
@@ -91,7 +124,7 @@ function onSubmit() {
 }
 onMounted(() => {
   // 绿色通道类型
-  if (dataForm.vipChannelType === 'WholesaleMarket') {
+  if (dataForm.openMethods === 'WholesaleMarket') {
     dataForm.methods = 'Y'
   }
 })

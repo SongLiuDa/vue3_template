@@ -1,14 +1,14 @@
 // 极速开户类型
 function isQuick(form) {
-  return form.vipChannel === 'Y'
+  return form.openMethods !== 'Standard'
 }
 // 普通开户
 function isGeneralOPenAcc(form) {
-  return form.vipChannel === 'N'
+  return form.openMethods === 'Standard'
 }
 // 绿色通道类型为标准批发市场
 function isWholesaleMarket(form) {
-  return form.vipChannelType === 'WholesaleMarket'
+  return form.openMethods === 'WholesaleMarket'
 }
 // 选择上门
 function chooseTheDoor(form) {
