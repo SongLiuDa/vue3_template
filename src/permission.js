@@ -11,7 +11,7 @@ router.beforeEach(async(to, from) => {
   const userStore = useUser()
   if (getToken()) {
     if (loginBlack.indexOf(to.name) !== -1) {
-      return '/'
+      return '/?urlSign=' + from.query.urlSign
     } else {
       if (userStore._profile.status !== undefined) {
         return true

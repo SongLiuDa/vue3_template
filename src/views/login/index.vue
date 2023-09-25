@@ -60,7 +60,12 @@ async function onSubmit() {
     await userStore.login(dataForm)
     sLoading.value = false
     show.value = false
-    router.push('/')
+    router.push({
+      path: '/',
+      query: {
+        urlSign: urlSign.value
+      }
+    })
   } catch {
     sLoading.value = false
   }
