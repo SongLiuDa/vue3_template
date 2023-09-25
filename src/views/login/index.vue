@@ -46,11 +46,11 @@ const userStore = useUser()
 const router = useRouter()
 const route = useRoute()
 
-const urlSign = computed(() => route.query.urlSign)
+const sign = computed(() => route.query.sign)
 const show = ref(true)
 const dataForm = reactive({
   viewPassword: undefined,
-  urlSign: urlSign.value
+  urlSign: sign.value
 })
 
 const sLoading = ref(false)
@@ -63,7 +63,7 @@ async function onSubmit() {
     router.push({
       path: '/',
       query: {
-        urlSign: urlSign.value
+        sign: sign.value
       }
     })
   } catch {

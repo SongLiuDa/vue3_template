@@ -4,7 +4,7 @@ import { useUser } from '@/store'
 import { Toast } from 'vant'
 
 function urlSign(r) {
-  return r.query.urlSign
+  return r.query.sign
 }
 
 // 未登录白名单
@@ -16,7 +16,7 @@ router.beforeEach(async(to, from) => {
   const userStore = useUser()
   if (getToken()) {
     if (loginBlack.indexOf(to.name) !== -1) {
-      return '/?urlSign=' + urlSign(to)
+      return '/?sign=' + urlSign(to)
     } else {
       if (userStore._profile.status !== undefined) {
         return true
@@ -31,7 +31,7 @@ router.beforeEach(async(to, from) => {
         } catch {
           userStore.resetToken()
           Toast.fail('请重新登录')
-          return '/login?urlSign=' + urlSign(to)
+          return '/login?sign=' + urlSign(to)
         }
       }
     }
