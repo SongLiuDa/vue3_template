@@ -120,11 +120,13 @@ function beforeClose(action) {
       }
       siteVerify(params).then(res => {
         // console.log('提交', res)
+        router.push('/succ')
+        Dialog.close()
         sLoading.value = false
       }).catch(() => {
+        resolve(true)
         sLoading.value = false
       })
-      router.push('/succ')
     } else {
       resolve(true)
     }

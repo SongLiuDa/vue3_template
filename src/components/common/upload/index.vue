@@ -51,22 +51,25 @@ function emitInput (val) {
   emit('update:modelValue', val)
 }
 const fileList = ref([])
+
+function fn(id) {
+  const params = {
+    cust_id: userStore._profile.custId,
+    file_id: id
+  }
+  return getUpload(params)
+}
+
 function getFile() {
-  props.modelValue.forEach(item => {
-    const params = {
-      cust_id: userStore._profile.custId,
-      file_id: item
-    }
-    getUpload(params).then(res => {
-      console.log('获取文件', res)
-    // const { content } = res
-    // fileList.value = content.map(item => ({
-    //   url: item.fileUrl,
-    //   name: item.fileName,
-    //   fileId: item.fileId,
-    //   status: 'done'
-    // }))
-    })
+  const fnList = props.modelValue.map(id => fn(id))
+  Promise.all(fnList).then(res => {
+    // console.log('res', res)
+    fileList.value = res.map(item => ({
+      url: item.file_url,
+      name: item.file_name,
+      fileId: item.file_id,
+      status: 'done'
+    }))
   })
 }
 
