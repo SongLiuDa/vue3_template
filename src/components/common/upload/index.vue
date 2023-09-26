@@ -53,7 +53,7 @@ function emitInput (val) {
 }
 const fileList = ref([])
 
-function fn(id) {
+function getFn(id) {
   const params = {
     cust_id: userStore._profile.custId,
     file_id: id
@@ -62,7 +62,7 @@ function fn(id) {
 }
 
 function getFile() {
-  const fnList = props.modelValue.map(id => fn(id))
+  const fnList = props.modelValue.map(id => getFn(id))
   Promise.all(fnList).then(res => {
     // console.log('res', res)
     fileList.value = res.map(item => ({
@@ -79,18 +79,27 @@ watchEffect(() => {
     getFile()
   }
 })
+function postFn(file) {
+  const imgFile = new FormData()
+  imgFile.append('file', file)
+  imgFile.append('cust_id', userStore._profile.custId)
+  return upload(imgFile)
+}
 // 上传前处理
 function handleAfter(data) {
   const sizeList = []
   const typeList = []
+  const fileList = []
   if (Array.isArray(data)) {
     data.forEach(item => {
       sizeList.push(item.file.size)
       typeList.push(item.file.type)
+      fileList.push(item.file)
     })
   } else {
     sizeList.push(data.file.size)
     typeList.push(data.file.type)
+    fileList.push(data.file)
   }
   const sizeLimit = sizeList.some(size => size > props.maxSize)
   if (sizeLimit) {
@@ -100,22 +109,19 @@ function handleAfter(data) {
   const typeLimit = typeList.some(type => props.fileType.includes(type))
 
   if (!typeLimit) {
+    data.status = 'failed'
+    data.message = '上传失败'
     Notify('你上传的图片格式不正确，请上传JPG/JPEG/PNG格式的图片')
     return false
   }
-  const imgFile = new FormData()
   data.status = 'uploading'
   data.message = '上传中...'
-  imgFile.append('file', data.file)
-  imgFile.append('cust_id', userStore._profile.custId)
-  upload(imgFile).then(res => {
-    // console.log('文件上传回调', res)
-    const { file_id } = res
-    const list = [...props.modelValue, file_id]
+  const fnList = fileList.map(id => postFn(id))
+  Promise.all(fnList).then(res => {
+    // console.log('res', res)
+    const fileIds = res.map(item => item.file_id)
+    const list = [...props.modelValue, ...fileIds]
     emitInput(list)
-  }).catch(() => {
-    data.status = 'failed'
-    data.message = '上传失败'
   })
 }
 function oversize() {
