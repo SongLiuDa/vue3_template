@@ -13,6 +13,7 @@
         :preview-full-image="false"
         :after-read="handleAfter"
         @delete="handleDelete"
+        @oversize="oversize"
       />
     </template>
   </van-field>
@@ -116,6 +117,9 @@ function handleAfter(data) {
     data.status = 'failed'
     data.message = '上传失败'
   })
+}
+function oversize() {
+  Notify('图片上传不能超过10M')
 }
 // 删除
 function handleDelete(file) {

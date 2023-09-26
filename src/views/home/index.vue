@@ -56,7 +56,7 @@
         <van-cell title="客户名称" :value="userStore._profile.realName" />
         <van-cell
           v-if="userStore._profile.bizActualAddress"
-          title="客户地址"
+          title="实际经营地址"
           :value="userStore._profile.bizActualAddress"
         />
         <van-cell title="开通方式" :value="openMethodEnum[userStore._profile.openMethod]" />
