@@ -9,12 +9,28 @@
     </div>
     <div class="tips">
       <p>请耐心等待，您提交的实地核实信息正在审核中...</p>
+      <div class="button-wrapper">
+        <AppButton type="primary" @click="ok">完成</AppButton>
+      </div>
     </div>
   </div>
 </template>
 
 <script setup>
+import { computed } from 'vue'
 import AppHeader from '@/components/header'
+import { useRoute, useRouter } from 'vue-router'
+const router = useRouter()
+const route = useRoute()
+const sign = computed(() => route.query.sign)
+function ok() {
+  router.push({
+    path: '/',
+    query: {
+      sign: sign.value
+    }
+  })
+}
 </script>
 
 <script>
@@ -43,5 +59,8 @@ export default { name: 'SuccPage' }
   line-height: 26px;
   color: $color66;
   margin-bottom: 1rem;
+}
+.button-wrapper{
+  padding: .6rem $basePadding;
 }
 </style>

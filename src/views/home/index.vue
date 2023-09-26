@@ -88,6 +88,7 @@
 <script setup>
 import AppHeader from '@/components/header'
 import { Dialog } from 'vant'
+import { getPasswod } from '@/utils/auth'
 import { formConfig, openMethodEnum } from './config'
 import { computed, onMounted, reactive, ref } from 'vue'
 import { useUser } from '@/store'
@@ -118,8 +119,13 @@ function beforeClose(action) {
         urlSign: sign.value,
         ...dataForm
       }
-      siteVerify(params).then(res => {
+      siteVerify(params).then(async res => {
         // console.log('提交', res)
+        const data = {
+          viewPassword: getPasswod(),
+          urlSign: sign.value
+        }
+        await userStore.login(data)
         router.push({
           path: '/succ',
           query: {
