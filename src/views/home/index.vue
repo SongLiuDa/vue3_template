@@ -65,7 +65,7 @@
         :form-config="formConfig"
         :data-form="dataForm"
         submit-text="提交"
-        :disabled="formIsDisabled"
+        :s-disabled="formIsDisabled"
         :s-loading="sLoading"
         @submit="onSubmit"
       >
@@ -97,7 +97,7 @@ const userStore = useUser()
 const router = useRouter()
 const route = useRoute()
 
-const formIsDisabled = computed(() => false)
+const formIsDisabled = computed(() => userStore._profile.status === 'PASS' || userStore._profile.status === 'AUDITING')
 const sign = computed(() => route.query.sign)
 
 const dataForm = reactive({
@@ -120,7 +120,12 @@ function beforeClose(action) {
       }
       siteVerify(params).then(res => {
         // console.log('提交', res)
-        router.push('/succ')
+        router.push({
+          path: '/succ',
+          query: {
+            sign: sign.value
+          }
+        })
         Dialog.close()
         sLoading.value = false
       }).catch(() => {

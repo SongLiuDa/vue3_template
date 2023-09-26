@@ -56,6 +56,7 @@
         </AppButton>
         <AppButton
           v-if="submitText"
+          :disabled="sDisabled"
           type="primary"
           native-type="submit"
           :loading="sLoading"
@@ -93,6 +94,10 @@ const props = defineProps({
     default: 'bottom'
   },
   sLoading: {
+    type: Boolean,
+    default: false
+  },
+  sDisabled: {
     type: Boolean,
     default: false
   }
