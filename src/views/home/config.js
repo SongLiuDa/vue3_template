@@ -134,7 +134,10 @@ export const formConfig = [
     prop: 'remarks',
     attrs: {
       fieldLabel: '备注',
-      placeholder: '请输入备注'
+      placeholder: '请输入备注',
+      type: 'textarea',
+      autosize: true,
+      rows: '1'
     },
     getAttrs(form) {
       return {
