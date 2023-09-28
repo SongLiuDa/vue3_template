@@ -90,7 +90,7 @@ import AppHeader from '@/components/header'
 import { Dialog } from 'vant'
 import { getPasswod } from '@/utils/auth'
 import { formConfig, openMethodEnum } from './config'
-import { computed, onMounted, reactive, ref } from 'vue'
+import { computed, onMounted, reactive, ref, watch } from 'vue'
 import { useUser } from '@/store'
 import { useRouter, useRoute } from 'vue-router'
 import { getSiteVerify, siteVerify } from '@api/home'
@@ -110,6 +110,13 @@ const dataForm = reactive({
   openMethods: userStore._profile.openMethod // 业务开通方式【WholesaleMarket:绿通-批发市场、Standard:普通客户】
 })
 
+watch(() => dataForm, (val) => {
+  if (userStore._profile.status === 'REFUSE') return
+  localStorage.setItem(userStore._profile.custId, JSON.stringify(val))
+}, {
+  deep: true
+})
+
 const sLoading = ref(false)
 function beforeClose(action) {
   return new Promise((resolve) => {
@@ -125,6 +132,7 @@ function beforeClose(action) {
           viewPassword: getPasswod(),
           urlSign: sign.value
         }
+        localStorage.removeItem(userStore._profile.custId)
         await userStore.login(data)
         router.push({
           path: '/succ',
@@ -181,6 +189,16 @@ onMounted(() => {
   }
   if (userStore._profile.status !== 'CREATED') {
     siteVerifyDetail()
+  } else {
+    const data = JSON.parse(localStorage.getItem(userStore._profile.custId))
+    if (data) {
+      const { envFile, groupPhotoFile, positionFile, remarks, goSiteVerify } = data
+      dataForm.goSiteVerify = goSiteVerify
+      dataForm.envFile = envFile
+      dataForm.groupPhotoFile = groupPhotoFile
+      dataForm.positionFile = positionFile
+      dataForm.remarks = remarks
+    }
   }
 })
 
