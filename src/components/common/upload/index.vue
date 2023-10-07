@@ -92,6 +92,8 @@ function handleAfter(data) {
   const fileList = []
   if (Array.isArray(data)) {
     data.forEach(item => {
+      item.status = 'uploading'
+      item.message = '上传中...'
       sizeList.push(item.file.size)
       typeList.push(item.file.type)
       fileList.push(item.file)
