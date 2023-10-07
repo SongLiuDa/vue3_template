@@ -172,9 +172,9 @@ function siteVerifyDetail() {
     // console.log('详情', res)
     const { envFile, groupPhotoFile, positionFile, remarks } = res.sitePic
     dataForm.goSiteVerify = res.goSiteVerify
-    dataForm.envFile = envFile
-    dataForm.groupPhotoFile = groupPhotoFile
-    dataForm.positionFile = positionFile
+    dataForm.envFile = envFile || []
+    dataForm.groupPhotoFile = groupPhotoFile || []
+    dataForm.positionFile = positionFile || []
     dataForm.remarks = remarks
     loading.value = false
   }).catch(() => {
@@ -194,9 +194,9 @@ onMounted(() => {
     if (data) {
       const { envFile, groupPhotoFile, positionFile, remarks, goSiteVerify } = data
       dataForm.goSiteVerify = goSiteVerify
-      dataForm.envFile = envFile
-      dataForm.groupPhotoFile = groupPhotoFile
-      dataForm.positionFile = positionFile
+      dataForm.envFile = envFile || []
+      dataForm.groupPhotoFile = groupPhotoFile || []
+      dataForm.positionFile = positionFile || []
       dataForm.remarks = remarks
     }
   }
