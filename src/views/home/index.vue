@@ -1,6 +1,5 @@
 <template>
   <div class="home">
-    <AppHeader />
     <!-- 非初始化 -->
     <van-notice-bar
       v-if="userStore._profile.status !== 'CREATED'"
@@ -44,6 +43,7 @@
         <p class="notice-tips">{{ userStore._profile.authRemark }}</p>
       </template>
     </van-notice-bar>
+    <AppHeader />
     <van-loading
       v-if="loading"
       class="loading"
