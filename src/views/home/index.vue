@@ -196,11 +196,26 @@ function siteVerifyDetail() {
   }
   getSiteVerify(params).then(res => {
     // console.log('详情', res)
-    const { envFile, groupPhotoFile, positionFile, remarks } = res.sitePic
+    const {
+      envFile,
+      groupPhotoFile,
+      positionFile,
+      remarks,
+      tradeContractFile,
+      tradeLogisticsOrderFile,
+      tradeReceiptStatementFile,
+      otherFiles,
+      proofOfAssociationFile
+    } = res.sitePic
     dataForm.goSiteVerify = res.goSiteVerify
     dataForm.envFile = envFile || []
     dataForm.groupPhotoFile = groupPhotoFile || []
     dataForm.positionFile = positionFile || []
+    dataForm.tradeContractFile = tradeContractFile || []
+    dataForm.tradeLogisticsOrderFile = tradeLogisticsOrderFile || []
+    dataForm.tradeReceiptStatementFile = tradeReceiptStatementFile || []
+    dataForm.otherFiles = otherFiles || []
+    dataForm.proofOfAssociationFile = proofOfAssociationFile || []
     dataForm.remarks = remarks
     loading.value = false
   }).catch(() => {
