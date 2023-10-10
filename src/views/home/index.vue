@@ -218,11 +218,27 @@ onMounted(() => {
   } else {
     const data = JSON.parse(localStorage.getItem(userStore._profile.custId))
     if (data) {
-      const { envFile, groupPhotoFile, positionFile, remarks, goSiteVerify } = data
+      const {
+        envFile,
+        groupPhotoFile,
+        positionFile,
+        remarks,
+        goSiteVerify,
+        tradeContractFile,
+        tradeLogisticsOrderFile,
+        tradeReceiptStatementFile,
+        otherFiles,
+        proofOfAssociationFile
+      } = data
       dataForm.goSiteVerify = goSiteVerify
       dataForm.envFile = envFile || []
       dataForm.groupPhotoFile = groupPhotoFile || []
       dataForm.positionFile = positionFile || []
+      dataForm.tradeContractFile = tradeContractFile || []
+      dataForm.tradeLogisticsOrderFile = tradeLogisticsOrderFile || []
+      dataForm.tradeReceiptStatementFile = tradeReceiptStatementFile || []
+      dataForm.otherFiles = otherFiles || []
+      dataForm.proofOfAssociationFile = proofOfAssociationFile || []
       dataForm.remarks = remarks
     }
   }
