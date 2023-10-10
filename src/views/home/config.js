@@ -83,12 +83,82 @@ export const formConfig = [
     prop: 'envFile',
     itemAttrs: {
       label: '客户办公场所室内拍照',
-      labelTipsSlot: 'officeSlot',
-      mb: true
+      labelTipsSlot: 'officeSlot'
     },
     attrs: {
       rules: uploadRules,
       maxCount: 9
+    },
+    ifRender(form) {
+      return isGeneralOPenAcc(form) && chooseTheDoor(form)
+    }
+  },
+  {
+    tag: 'upload',
+    prop: 'tradeContractFile',
+    itemAttrs: {
+      label: '近三个月一笔完整贸易背景证明文件(选填)',
+      labelTipsSlot: 'bookingNoteSlot'
+    },
+    attrs: {
+      rules: [{ required: false }]
+    },
+    ifRender(form) {
+      return isGeneralOPenAcc(form) && chooseTheDoor(form)
+    }
+  },
+  {
+    tag: 'upload',
+    prop: 'tradeLogisticsOrderFile',
+    itemAttrs: {
+      label: '物流单'
+    },
+    attrs: {
+      rules: [{ required: false }]
+    },
+    ifRender(form) {
+      return isGeneralOPenAcc(form) && chooseTheDoor(form)
+    }
+  },
+  {
+    tag: 'upload',
+    prop: 'tradeReceiptStatementFile',
+    itemAttrs: {
+      label: '收款流水单'
+    },
+    attrs: {
+      rules: [{ required: false }]
+    },
+    ifRender(form) {
+      return isGeneralOPenAcc(form) && chooseTheDoor(form)
+    }
+  },
+  {
+    tag: 'upload',
+    prop: 'otherFiles',
+    itemAttrs: {
+      label: '其他材料(选填)',
+      labelTipsSlot: 'otherFileSlot'
+    },
+    attrs: {
+      rules: [{ required: false }],
+      maxCount: 9
+    },
+    ifRender(form) {
+      return isGeneralOPenAcc(form) && chooseTheDoor(form)
+    }
+  },
+  {
+    tag: 'upload',
+    prop: 'proofOfAssociationFile',
+    itemAttrs: {
+      label: '关联关系证明(选填)',
+      labelTipsSlot: 'correlationProofSlot',
+      mb: true
+    },
+    attrs: {
+      rules: [{ required: false }],
+      maxCount: 5
     },
     ifRender(form) {
       return isGeneralOPenAcc(form) && chooseTheDoor(form)
