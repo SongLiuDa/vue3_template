@@ -33,5 +33,11 @@ export const basic = {
       rules: defaultChange
     },
     rulesRrigger: 'onChange'
+  },
+  checkbox: {
+    component: 'AppCheckbox',
+    itemAttrs: {},
+    attrs: {},
+    rulesRrigger: 'onChange'
   }
 }

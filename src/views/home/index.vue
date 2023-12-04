@@ -69,38 +69,17 @@
         :s-loading="sLoading"
         @submit="onSubmit"
       >
-        <!-- 企业外出拍照打卡 -->
-        <template #goOutSlot>
-          <p class="tips">需能显示面访地点的地址信息、办公环境为外贸企业的办公场所</p>
+        <!-- 销售实地核查证明文件 -->
+        <template #fieldVerificationSlot>
+          <p class="tips">{{ fieldVerificationTips }}</p>
         </template>
-        <!-- 客户办公场所室内拍照 -->
-        <template #officeSlot>
-          <p class="tips">如客户办公场所具备外贸经营历史要素，如宣传手册、文化墙、企业经营历史描述、包装箱标签、商品样本等（需呈现与企业主体相关联的信息），至少3张，最多9张</p>
+        <!-- 历史贸易背景证明材料 -->
+        <template #historicalTradeSlot>
+          <p class="tips">{{ historicalTradeTips }}</p>
         </template>
-        <!-- 店铺环境照片 -->
-        <template #storeSlot>
-          <p class="tips">店铺环境至少3张，最多9张</p>
-        </template>
-        <!-- 近三个月一笔完整贸易背景证明文件( -->
-        <template #bookingNoteSlot>
-          <div class="tips">
-            <p>若买家与收货人不一致，请提交买家确认完整收货人信息的沟通记录截图等;</p>
-            <p>若买家与付款人不一致，请提交买家确认付款人信息的沟通记录截图或原因说明等;</p>
-            <p>其它情况，可补充提交更多佐证信息。</p>
-          </div>
-          <div class="label-sub">
-            合同(PI/CI)
-          </div>
-        </template>
-        <!-- 其他材料 -->
-        <template #otherFileSlot>
-          <p class="tips">最多上传9张</p>
-        </template>
-        <!-- 其他材料 -->
-        <template #correlationProofSlot>
-          <p class="tips">
-            您所提供的货易背景证明文件对应的卖方或发货方或收教方需与skyee注册主体一致或同一实控人。若非同一注册主体，请提供对应的关联关系证明文件，最多上传5张
-          </p>
+        <!-- 客户其他证明材料 -->
+        <template #otherSlot>
+          <p class="tips">{{ otherTips }}</p>
         </template>
       </AppForm>
     </div>
@@ -110,7 +89,13 @@
 import AppHeader from '@/components/header'
 import { Dialog } from 'vant'
 import { getPasswod } from '@/utils/auth'
-import { formConfig, openMethodEnum } from './config'
+import {
+  formConfig,
+  openMethodEnum,
+  fieldVerificationEnum,
+  historicalTradeEnum,
+  otherEnum
+} from './config'
 import { computed, onMounted, reactive, ref, watch } from 'vue'
 import { useUser } from '@/store'
 import { useRouter, useRoute } from 'vue-router'
@@ -124,17 +109,24 @@ const sign = computed(() => route.query.sign)
 
 const dataForm = reactive({
   goSiteVerify: undefined, // Y:上门 N：放弃上门
-  envFile: [], // 实地环境圈「普客：办公场所室内照、批发市场：店铺环境照】
-  groupPhotoFile: [], // 合照图片【普客：与1og0合影、批发市场：与店铺老板合照】
-  positionFile: [], // 位置照片【普客：外出打卡照，批发市场：门头照】
-  tradeContractFile: [], // 合同(PI/CI)
-  tradeLogisticsOrderFile: [], // 物流单
-  tradeReceiptStatementFile: [], // 收款流水单
-  otherFiles: [], // 其他材料
-  proofOfAssociationFile: [], // 关联关系证明
+  fieldVerifyEnvFiles: [], // 销售实地核查证明文件
+  historyTradeProofFiles: [], // 历史贸易背景证明材料
+  otherFiles: [], // 客户其他证明材料
   remarks: undefined,
+  partnerWithSoeFlag: undefined, // 客户是否有与国企合作[N,Y]
+  partnerWithSoeFlagOther: undefined, // 国企合作-其他
+  partnerWithSteelMillsMode: undefined, // 客户是否有与国企合作
+  partnerWithSopartnerWithSteelMillsModeOtherFlag: undefined, // 合作模式-其他
+  mainCollCurrencies: [], // 客户目前主要收款的货币
+  mainCollCurrenciesOther: undefined, // 收款的货币-其他
   openMethods: userStore._profile.openMethod // 业务开通方式【WholesaleMarket:绿通-批发市场、Standard:普通客户】
 })
+// 销售实地核查证明文件提示
+const fieldVerificationTips = computed(() => fieldVerificationEnum[dataForm.openMethods])
+// 历史贸易背景证明材料提示
+const historicalTradeTips = computed(() => historicalTradeEnum[dataForm.openMethods])
+// 客户其他证明材料提示
+const otherTips = computed(() => otherEnum[dataForm.openMethods])
 
 watch(() => dataForm, (val) => {
   if (userStore._profile.status === 'REFUSE') return
@@ -188,6 +180,16 @@ function onSubmit() {
     return true
   })
 }
+// dataForm赋值
+function dataFormAssign(data) {
+  const list = Object.keys(dataForm)
+  list.forEach(prop => {
+    const value = data[prop]
+    if (value) {
+      dataForm[prop] = data[prop]
+    }
+  })
+}
 const loading = ref(false)
 function siteVerifyDetail() {
   loading.value = true
@@ -196,27 +198,11 @@ function siteVerifyDetail() {
   }
   getSiteVerify(params).then(res => {
     // console.log('详情', res)
-    const {
-      envFile,
-      groupPhotoFile,
-      positionFile,
-      remarks,
-      tradeContractFile,
-      tradeLogisticsOrderFile,
-      tradeReceiptStatementFile,
-      otherFiles,
-      proofOfAssociationFile
-    } = res.sitePic
-    dataForm.goSiteVerify = res.goSiteVerify
-    dataForm.envFile = envFile || []
-    dataForm.groupPhotoFile = groupPhotoFile || []
-    dataForm.positionFile = positionFile || []
-    dataForm.tradeContractFile = tradeContractFile || []
-    dataForm.tradeLogisticsOrderFile = tradeLogisticsOrderFile || []
-    dataForm.tradeReceiptStatementFile = tradeReceiptStatementFile || []
-    dataForm.otherFiles = otherFiles || []
-    dataForm.proofOfAssociationFile = proofOfAssociationFile || []
-    dataForm.remarks = remarks
+    const data = {
+      ...res,
+      ...res.sitePic
+    }
+    dataFormAssign(data)
     loading.value = false
   }).catch(() => {
     loading.value = false
@@ -233,28 +219,7 @@ onMounted(() => {
   } else {
     const data = JSON.parse(localStorage.getItem(userStore._profile.custId))
     if (data) {
-      const {
-        envFile,
-        groupPhotoFile,
-        positionFile,
-        remarks,
-        goSiteVerify,
-        tradeContractFile,
-        tradeLogisticsOrderFile,
-        tradeReceiptStatementFile,
-        otherFiles,
-        proofOfAssociationFile
-      } = data
-      dataForm.goSiteVerify = goSiteVerify
-      dataForm.envFile = envFile || []
-      dataForm.groupPhotoFile = groupPhotoFile || []
-      dataForm.positionFile = positionFile || []
-      dataForm.tradeContractFile = tradeContractFile || []
-      dataForm.tradeLogisticsOrderFile = tradeLogisticsOrderFile || []
-      dataForm.tradeReceiptStatementFile = tradeReceiptStatementFile || []
-      dataForm.otherFiles = otherFiles || []
-      dataForm.proofOfAssociationFile = proofOfAssociationFile || []
-      dataForm.remarks = remarks
+      dataFormAssign(data)
     }
   }
 })

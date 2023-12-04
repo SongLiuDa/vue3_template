@@ -1,14 +1,10 @@
-// 极速开户类型
-function isQuick(form) {
-  return form.openMethods !== 'Standard'
-}
-// 普通开户
-function isGeneralOPenAcc(form) {
-  return form.openMethods === 'Standard'
-}
 // 绿色通道类型为标准批发市场
 function isWholesaleMarket(form) {
   return form.openMethods === 'WholesaleMarket'
+}
+// 绿色通道类型为钢贸
+function isSteelTrade(form) {
+  return form.openMethods === 'SteelTrade'
 }
 // 选择上门
 function chooseTheDoor(form) {
@@ -16,8 +12,26 @@ function chooseTheDoor(form) {
 }
 
 export const openMethodEnum = {
+  SteelTrade: '绿通-钢贸用户',
   WholesaleMarket: '绿通-标准批发市场用户',
   Standard: '普通客户'
+}
+// 销售实地核查证明文件
+export const fieldVerificationEnum = {
+  SteelTrade: '请上传与客户企业logo合影照片（至少1张）、企业微信外出拍照打卡照片（至少1张）以及客户办公场所室内照片（至少3张）',
+  WholesaleMarket: '请上传客户门头照片（至少1张）、店铺环境照片（至少3张）以及与店铺老板合照（至少1张）',
+  Standard: '请上传与客户企业1ogo合影照片(室少1张）、企业微信外出拍照打卡照片（至少1张）以及客户办公场所室内照片 （至少3张）'
+}
+// 历史贸易背景证明材料
+export const historicalTradeEnum = {
+  SteelTrade: '请上传历史交易的PI/CI/ 合同、提单、收款凭证。如额外上传进仓单或历史与钢厂的订购合同，可加速准入审核',
+  Standard: '请上传历史交易的PI/CI/ 合同、提单、收款凭证。如额外上传进仓单或历史与钢厂的订购合同，可加速淮入审核'
+}
+// 客户其他证明材料
+export const otherEnum = {
+  SteelTrade: '如客户提供货易背景证明文件与skyee注册主体不一致或非同一实控人。可上传客户的关联关系证明文件，加速准入审校。',
+  WholesaleMarket: '如客户提供货易背景证明文件与skyee注册主体不一致或非同一实控人。可上传客户的关联关系证明文件，加速准入审核',
+  Standard: '如客户提供货易背景证明文件与skyee注册主体不一致或非同一实控人。可上传客户的关联关系证明文件，加速淮入审核'
 }
 
 const uploadRules = [
@@ -26,8 +40,8 @@ const uploadRules = [
       const list = value.filter(item => item.status === 'done')
       if (!value.length) {
         return '必填'
-      } else if (list.length < 3) {
-        return '至少上传3张照片'
+      } else if (list.length < 1) {
+        return '至少上传1张照片'
       } else {
         return Promise.resolve()
       }
@@ -52,156 +66,151 @@ export const formConfig = [
       return {
         columns: [
           { value: 'Y', label: '选择上门' },
-          { value: 'N', label: '放弃上门', hide: isWholesaleMarket(form) }
+          {
+            value: 'N',
+            label: '放弃上门',
+            hide: isWholesaleMarket(form) || isSteelTrade(form)
+          }
         ]
       }
     }
   },
   {
     tag: 'upload',
-    prop: 'groupPhotoFile',
+    prop: 'fieldVerifyEnvFiles',
     itemAttrs: {
-      label: '销售与客户企业logo合影'
-    },
-    ifRender(form) {
-      return isGeneralOPenAcc(form) && chooseTheDoor(form)
-    }
-  },
-  {
-    tag: 'upload',
-    prop: 'positionFile',
-    itemAttrs: {
-      label: '企业外出拍照打卡',
-      labelTipsSlot: 'goOutSlot'
-    },
-    ifRender(form) {
-      return isGeneralOPenAcc(form) && chooseTheDoor(form)
-    }
-  },
-  {
-    tag: 'upload',
-    prop: 'envFile',
-    itemAttrs: {
-      label: '客户办公场所室内拍照',
-      labelTipsSlot: 'officeSlot'
+      label: '销售实地核查证明文件',
+      labelTipsSlot: 'fieldVerificationSlot'
     },
     attrs: {
       rules: uploadRules,
-      maxCount: 9
+      maxCount: 10
     },
     ifRender(form) {
-      return isGeneralOPenAcc(form) && chooseTheDoor(form)
+      return chooseTheDoor(form)
     }
   },
   {
     tag: 'upload',
-    prop: 'tradeContractFile',
+    prop: 'historyTradeProofFiles',
     itemAttrs: {
-      label: '近三个月一笔完整贸易背景证明文件(选填)',
-      labelTipsSlot: 'bookingNoteSlot'
+      label: '历史贸易背景证明材料(选填)',
+      labelTipsSlot: 'historicalTradeSlot'
     },
     attrs: {
-      rules: [{ required: false }]
+      rules: [{ required: false }],
+      maxCount: 10
     },
     ifRender(form) {
-      return isGeneralOPenAcc(form) && chooseTheDoor(form)
-    }
-  },
-  {
-    tag: 'upload',
-    prop: 'tradeLogisticsOrderFile',
-    itemAttrs: {
-      label: '物流单'
-    },
-    attrs: {
-      rules: [{ required: false }]
-    },
-    ifRender(form) {
-      return isGeneralOPenAcc(form) && chooseTheDoor(form)
-    }
-  },
-  {
-    tag: 'upload',
-    prop: 'tradeReceiptStatementFile',
-    itemAttrs: {
-      label: '收款流水单'
-    },
-    attrs: {
-      rules: [{ required: false }]
-    },
-    ifRender(form) {
-      return isGeneralOPenAcc(form) && chooseTheDoor(form)
+      return !isWholesaleMarket(form) && chooseTheDoor(form)
     }
   },
   {
     tag: 'upload',
     prop: 'otherFiles',
     itemAttrs: {
-      label: '其他材料(选填)',
-      labelTipsSlot: 'otherFileSlot'
+      label: '客户其他证明材料(选填)',
+      labelTipsSlot: 'otherSlot'
     },
     attrs: {
       rules: [{ required: false }],
-      maxCount: 9
+      maxCount: 10
     },
     ifRender(form) {
-      return isGeneralOPenAcc(form) && chooseTheDoor(form)
+      return chooseTheDoor(form)
     }
   },
   {
-    tag: 'upload',
-    prop: 'proofOfAssociationFile',
+    tag: 'radio',
+    prop: 'partnerWithSoeFlag',
     itemAttrs: {
-      label: '关联关系证明(选填)',
-      labelTipsSlot: 'correlationProofSlot',
-      mb: true
+      label: '客户是否有与国企合作(选填)'
     },
     attrs: {
       rules: [{ required: false }],
-      maxCount: 5
+      columns: [
+        { value: 'N', label: '没有' },
+        { value: 'Y', label: '有' }
+      ]
     },
     ifRender(form) {
-      return isGeneralOPenAcc(form) && chooseTheDoor(form)
+      return chooseTheDoor(form) && isSteelTrade(form)
     }
   },
   {
-    tag: 'upload',
-    prop: 'positionFile',
-    itemAttrs: {
-      label: '门头照片'
+    prop: 'partnerWithSoeFlagOther',
+    attrs: {
+      fieldLabel: '合作国企名称',
+      placeholder: '请填写合作的国企名称'
     },
     ifRender(form) {
-      return isQuick(form) && chooseTheDoor(form)
+      return chooseTheDoor(form) && isSteelTrade(form) && form.partnerWithSoeFlag === 'Y'
     }
   },
   {
-    tag: 'upload',
-    prop: 'envFile',
+    tag: 'radio',
+    prop: 'partnerWithSteelMillsMode',
     itemAttrs: {
-      label: '店铺环境照片',
-      labelTipsSlot: 'storeSlot'
+      label: '客户是否有与国企合作(选填)'
     },
     attrs: {
-      rules: uploadRules,
-      maxCount: 9
+      rules: [{ required: false }],
+      isMax: true,
+      columns: [
+        { value: '采购成品货物', label: '采购成品货物' },
+        { value: '采购原材料并自行加工', label: '采购原材料并自行加工' },
+        { value: '工贸一体', label: '工贸一体' },
+        { value: '其他', label: '其他' }
+      ]
     },
     ifRender(form) {
-      return isQuick(form) && chooseTheDoor(form)
+      return chooseTheDoor(form) && isSteelTrade(form)
     }
   },
   {
-    tag: 'upload',
-    prop: 'groupPhotoFile',
-    itemAttrs: {
-      label: '销售与店铺老板合照照片',
-      mb: true
+    prop: 'partnerWithSteelMillsModeOther',
+    attrs: {
+      fieldLabel: '合作模式',
+      placeholder: '请描述客户与钢厂现有的合作模式'
     },
     ifRender(form) {
-      return isQuick(form) && chooseTheDoor(form)
+      return chooseTheDoor(form) && isSteelTrade(form) && form.partnerWithSteelMillsMode === '其他'
+    }
+  },
+  {
+    tag: 'checkbox',
+    prop: 'mainCollCurrencies',
+    itemAttrs: {
+      label: '客户目前主要收款的货币(选填)'
+    },
+    attrs: {
+      rules: [{ required: false }],
+      path: [
+        { value: '人民币', label: '人民币' },
+        { value: '外币', label: '外币' }
+      ]
+    },
+    ifRender(form) {
+      return chooseTheDoor(form) && isSteelTrade(form)
+    }
+  },
+  {
+    prop: 'mainCollCurrenciesOther',
+    attrs: {
+      fieldLabel: '主要收款货币',
+      placeholder: '请填写客户目前主要收款涉及的外币'
+    },
+    ifRender(form) {
+      return chooseTheDoor(form) && isSteelTrade(form) && form.mainCollCurrencies.includes('外币')
     }
   },
   {
     prop: 'remarks',
+    getItemAttrs(form) {
+      return {
+        mt: chooseTheDoor(form)
+      }
+    },
     attrs: {
       fieldLabel: '备注',
       placeholder: '请输入备注',

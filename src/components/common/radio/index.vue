@@ -3,6 +3,7 @@
     :rules="rules"
     :label="fieldLabel"
     class="custom-field my-radio"
+    :class="{'is-max': isMax}"
   >
     <template #input>
       <van-radio-group
@@ -47,7 +48,11 @@ const porps = defineProps({
     type: Boolean,
     default: false
   },
-  fieldLabel: String
+  fieldLabel: String,
+  isMax: {
+    type: Boolean,
+    default: false
+  }
 })
 const emit = defineEmits(['update:model-value'])
 const { modelValue } = toRefs(porps)
@@ -60,3 +65,13 @@ function handleChange (e) {
 <script>
 export default { name: 'AppRadio' }
 </script>
+<style lang="scss">
+.my-radio{
+  &.is-max{
+    padding-bottom: 8px;
+    .van-radio{
+      margin-bottom: 8px;
+    }
+  }
+}
+</style>
