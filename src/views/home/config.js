@@ -198,7 +198,7 @@ export const formConfig = [
     prop: 'mainCollCurrenciesOther',
     attrs: {
       fieldLabel: '主要收款货币',
-      placeholder: '请填写客户目前主要收款涉及的外币'
+      placeholder: '如有多个币种建议/分割，例:美元/欧元'
     },
     ifRender(form) {
       return chooseTheDoor(form) && isSteelTrade(form) && form.mainCollCurrencies.includes('外币')
