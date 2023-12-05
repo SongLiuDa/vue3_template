@@ -116,7 +116,7 @@ const dataForm = reactive({
   partnerWithSoeFlag: undefined, // 客户是否有与国企合作[N,Y]
   partnerWithSoeFlagOther: undefined, // 国企合作-其他
   partnerWithSteelMillsMode: undefined, // 客户是否有与国企合作
-  partnerWithSopartnerWithSteelMillsModeOtherFlag: undefined, // 合作模式-其他
+  partnerWithSteelMillsModeOther: undefined, // 合作模式-其他
   mainCollCurrencies: [], // 客户目前主要收款的货币
   mainCollCurrenciesOther: undefined, // 收款的货币-其他
   openMethods: userStore._profile.openMethod // 业务开通方式【WholesaleMarket:绿通-批发市场、Standard:普通客户】
