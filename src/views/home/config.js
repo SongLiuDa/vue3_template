@@ -6,6 +6,11 @@ function isWholesaleMarket(form) {
 function isSteelTrade(form) {
   return form.openMethods === 'SteelTrade'
 }
+// 普通客户
+function isStandard(form) {
+  return form.openMethods === 'Standard'
+}
+
 // 选择上门
 function chooseTheDoor(form) {
   return form.goSiteVerify === 'Y'
@@ -94,12 +99,20 @@ export const formConfig = [
     tag: 'upload',
     prop: 'historyTradeProofFiles',
     itemAttrs: {
-      label: '历史贸易背景证明材料(选填)',
       labelTipsSlot: 'historicalTradeSlot'
     },
     attrs: {
-      rules: [{ required: false }],
       maxCount: 10
+    },
+    getItemAttrs(form) {
+      return {
+        label: isStandard(form) ? '历史贸易背景证明材料' : '历史贸易背景证明材料(选填)'
+      }
+    },
+    getAttrs(form) {
+      return {
+        rules: isStandard(form) ? uploadRules : [{ required: false }]
+      }
     },
     ifRender(form) {
       return !isWholesaleMarket(form) && chooseTheDoor(form)
