@@ -71,11 +71,7 @@ export const formConfig = [
       return {
         columns: [
           { value: 'Y', label: '选择上门' },
-          {
-            value: 'N',
-            label: '放弃上门',
-            hide: isWholesaleMarket(form) || isSteelTrade(form)
-          }
+          { value: 'N', label: '放弃上门' }
         ]
       }
     }
