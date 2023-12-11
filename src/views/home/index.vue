@@ -96,7 +96,7 @@ import {
   historicalTradeEnum,
   otherEnum
 } from './config'
-import { computed, onMounted, reactive, ref, watch } from 'vue'
+import { computed, onMounted, reactive, ref } from 'vue'
 import { useUser } from '@/store'
 import { useRouter, useRoute } from 'vue-router'
 import { getSiteVerify, siteVerify } from '@api/home'
@@ -127,13 +127,6 @@ const fieldVerificationTips = computed(() => fieldVerificationEnum[dataForm.open
 const historicalTradeTips = computed(() => historicalTradeEnum[dataForm.openMethods])
 // 客户其他证明材料提示
 const otherTips = computed(() => otherEnum[dataForm.openMethods])
-
-watch(() => dataForm, (val) => {
-  if (userStore._profile.status === 'REFUSE') return
-  localStorage.setItem(userStore._profile.custId, JSON.stringify(val))
-}, {
-  deep: true
-})
 
 const sLoading = ref(false)
 function beforeClose(action) {
@@ -214,14 +207,7 @@ onMounted(() => {
   if (dataForm.openMethods === 'WholesaleMarket') {
     dataForm.goSiteVerify = 'Y'
   }
-  if (userStore._profile.status !== 'CREATED') {
-    siteVerifyDetail()
-  } else {
-    const data = JSON.parse(localStorage.getItem(userStore._profile.custId))
-    if (data) {
-      dataFormAssign(data)
-    }
-  }
+  siteVerifyDetail()
 })
 
 </script>
