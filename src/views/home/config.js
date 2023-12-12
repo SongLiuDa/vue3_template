@@ -160,7 +160,7 @@ export const formConfig = [
     tag: 'radio',
     prop: 'partnerWithSteelMillsMode',
     itemAttrs: {
-      label: '客户是否有与国企合作(选填)'
+      label: '客户与钢厂的合作模式(选填)'
     },
     attrs: {
       rules: [{ required: false }],
