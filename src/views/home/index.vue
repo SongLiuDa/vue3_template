@@ -2,7 +2,7 @@
   <div class="home">
     <!-- 非初始化 -->
     <van-notice-bar
-      v-if="userStore._profile.status !== 'CREATED'"
+      v-if="userStore._profile.status !== 'CREATED' || userStore._profile.authRemark"
       wrapable
       :scrollable="false"
     >
@@ -31,7 +31,7 @@
         <p class="notice-tips">您提交的实地核实信息已审核通过，无需再进行操作</p>
       </template>
       <!-- 驳回 -->
-      <template v-if="userStore._profile.status === 'REFUSE'">
+      <template v-if="userStore._profile.status === 'REFUSE' || userStore._profile.status === 'CREATED'">
         <div class="title w500 flex-c">
           <van-icon
             name="warning"

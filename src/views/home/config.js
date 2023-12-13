@@ -6,6 +6,10 @@ function isWholesaleMarket(form) {
 function isSteelTrade(form) {
   return form.openMethods === 'SteelTrade'
 }
+// 绿色通道类型为香港同名户用户
+function isHKSameName(form) {
+  return form.openMethods === 'HKSameName'
+}
 // 普通客户
 function isStandard(form) {
   return form.openMethods === 'Standard'
@@ -19,23 +23,27 @@ function chooseTheDoor(form) {
 export const openMethodEnum = {
   SteelTrade: '绿通-钢贸用户',
   WholesaleMarket: '绿通-标准批发市场用户',
+  HKSameName: '绿通-香港同名户用户',
   Standard: '普通客户'
 }
 // 销售实地核查证明文件
 export const fieldVerificationEnum = {
   SteelTrade: '请上传与客户企业logo合影照片（至少1张）、企业微信外出拍照打卡照片（至少1张）以及客户办公场所室内照片（至少3张）',
   WholesaleMarket: '请上传客户门头照片（至少1张）、店铺环境照片（至少3张）以及与店铺老板合照（至少1张）',
+  HKSameName: '请上传与客户企业1ogo合影照片(室少1张）、企业微信外出拍照打卡照片（至少1张）以及客户办公场所室内照片 （至少3张）',
   Standard: '请上传与客户企业1ogo合影照片(室少1张）、企业微信外出拍照打卡照片（至少1张）以及客户办公场所室内照片 （至少3张）'
 }
 // 历史贸易背景证明材料
 export const historicalTradeEnum = {
   SteelTrade: '请上传历史交易的PI/CI/ 合同、提单、收款凭证。如额外上传进仓单或历史与钢厂的订购合同，可加速准入审核',
+  HKSameName: '请上传历史交易的PI/CI/ 合同、提单、收款凭证。如额外上传进仓单或历史与钢厂的订购合同，可加速淮入审核',
   Standard: '请上传历史交易的PI/CI/ 合同、提单、收款凭证。如额外上传进仓单或历史与钢厂的订购合同，可加速淮入审核'
 }
 // 客户其他证明材料
 export const otherEnum = {
   SteelTrade: '如客户提供货易背景证明文件与skyee注册主体不一致或非同一实控人。可上传客户的关联关系证明文件，加速准入审校。',
   WholesaleMarket: '如客户提供货易背景证明文件与skyee注册主体不一致或非同一实控人。可上传客户的关联关系证明文件，加速准入审核',
+  HKSameName: '如客户提供货易背景证明文件与skyee注册主体不一致或非同一实控人。可上传客户的关联关系证明文件，加速淮入审核',
   Standard: '如客户提供货易背景证明文件与skyee注册主体不一致或非同一实控人。可上传客户的关联关系证明文件，加速淮入审核'
 }
 
@@ -102,12 +110,12 @@ export const formConfig = [
     },
     getItemAttrs(form) {
       return {
-        label: isStandard(form) ? '历史贸易背景证明材料' : '历史贸易背景证明材料(选填)'
+        label: isStandard(form) || isHKSameName(form) ? '历史贸易背景证明材料' : '历史贸易背景证明材料(选填)'
       }
     },
     getAttrs(form) {
       return {
-        rules: isStandard(form) ? uploadRules : [{ required: false }]
+        rules: isStandard(form) || isHKSameName(form) ? uploadRules : [{ required: false }]
       }
     },
     ifRender(form) {
