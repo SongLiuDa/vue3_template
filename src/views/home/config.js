@@ -10,10 +10,6 @@ function isSteelTrade(form) {
 function isHKSameName(form) {
   return form.openMethods === 'HKSameName'
 }
-// 普通客户
-function isStandard(form) {
-  return form.openMethods === 'Standard'
-}
 
 // 选择上门
 function chooseTheDoor(form) {
@@ -110,12 +106,12 @@ export const formConfig = [
     },
     getItemAttrs(form) {
       return {
-        label: isStandard(form) || isHKSameName(form) ? '历史贸易背景证明材料' : '历史贸易背景证明材料(选填)'
+        label: isHKSameName(form) ? '历史贸易背景证明材料' : '历史贸易背景证明材料(选填)'
       }
     },
     getAttrs(form) {
       return {
-        rules: isStandard(form) || isHKSameName(form) ? uploadRules : [{ required: false }]
+        rules: isHKSameName(form) ? uploadRules : [{ required: false }]
       }
     },
     ifRender(form) {
