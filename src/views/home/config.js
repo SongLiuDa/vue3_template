@@ -7,9 +7,9 @@ function isSteelTrade(form) {
   return form.openMethods === 'SteelTrade'
 }
 // 绿色通道类型为香港同名户用户
-function isHKSameName(form) {
-  return form.openMethods === 'HKSameName'
-}
+// function isHKSameName(form) {
+//   return form.openMethods === 'HKSameName'
+// }
 
 // 选择上门
 function chooseTheDoor(form) {
@@ -99,21 +99,23 @@ export const formConfig = [
     tag: 'upload',
     prop: 'historyTradeProofFiles',
     itemAttrs: {
-      labelTipsSlot: 'historicalTradeSlot'
+      labelTipsSlot: 'historicalTradeSlot',
+      label: '历史贸易背景证明材料(选填)'
     },
     attrs: {
-      maxCount: 10
+      maxCount: 10,
+      rules: [{ required: false }]
     },
-    getItemAttrs(form) {
-      return {
-        label: isHKSameName(form) ? '历史贸易背景证明材料' : '历史贸易背景证明材料(选填)'
-      }
-    },
-    getAttrs(form) {
-      return {
-        rules: isHKSameName(form) ? uploadRules : [{ required: false }]
-      }
-    },
+    // getItemAttrs(form) {
+    //   return {
+    //     label: isHKSameName(form) ? '历史贸易背景证明材料' : '历史贸易背景证明材料(选填)'
+    //   }
+    // },
+    // getAttrs(form) {
+    //   return {
+    //     rules: isHKSameName(form) ? uploadRules : [{ required: false }]
+    //   }
+    // },
     ifRender(form) {
       return !isWholesaleMarket(form) && chooseTheDoor(form)
     }
