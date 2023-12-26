@@ -32,8 +32,8 @@ export const fieldVerificationEnum = {
 // 历史贸易背景证明材料
 export const historicalTradeEnum = {
   SteelTrade: '请上传历史交易的PI/CI/ 合同、提单、收款凭证。如额外上传进仓单或历史与钢厂的订购合同，可加速准入审核',
-  HKSameName: '请上传历史交易的PI/CI/ 合同、提单、收款凭证。如额外上传进仓单或历史与钢厂的订购合同，可加速淮入审核',
-  Standard: '请上传历史交易的PI/CI/ 合同、提单、收款凭证。如额外上传进仓单或历史与钢厂的订购合同，可加速淮入审核'
+  HKSameName: '请上传历史交易的PI/CI/ 合同、提单、收款凭证',
+  Standard: '请上传历史交易的PI/CI/ 合同、提单、收款凭证'
 }
 // 客户其他证明材料
 export const otherEnum = {
