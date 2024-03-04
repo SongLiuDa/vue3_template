@@ -9,13 +9,12 @@
 
 <script setup>
 import { computed } from 'vue'
+defineOptions({ name: 'SvgIcon' })
+
 const props = defineProps({
   iconClass: String
 })
 const iconName = computed(() => `#icon-${props.iconClass}`)
-</script>
-<script>
-export default { name: 'SvgIcon' }
 </script>
 
 <style scoped>

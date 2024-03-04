@@ -1,5 +1,5 @@
 {
-  "name": "siteverify",
+  "name": "business_client_h5",
   "version": "0.1.0",
   "private": true,
   "scripts": {
@@ -14,7 +14,7 @@
     "nprogress": "^0.2.0",
     "pinia": "2.1.6",
     "vant": "^3.6.5",
-    "vue": "^3.3.4",
+    "vue": "^3.4.21",
     "vue-cookies": "^1.8.2",
     "vue-router": "^4.1.6"
   },

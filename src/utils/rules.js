@@ -1,3 +1,5 @@
+import { phoneReg, emailReg } from './reg'
+
 export const defaultBlur = [{
   required: true,
   message: '必填',
@@ -13,7 +15,7 @@ export const confirmRules = [
   {
     validator: (value, rule) => {
       if (!value) {
-        return 'Please agree to the agreement'
+        return '请同意协议'
       } else {
         return Promise.resolve()
       }
@@ -22,13 +24,14 @@ export const confirmRules = [
   }
 ]
 
-// 上传图片
-export const uploadRules = [
+// 邮箱
+export const emailRules = [
   {
     validator: (value) => {
-      const isPass = value.every(item => item.status === 'done')
-      if (!isPass || !value.length) {
+      if (!value) {
         return '必填'
+      } else if (!emailReg.test(value)) {
+        return '请输入正确的电子邮件'
       } else {
         return Promise.resolve()
       }
@@ -36,3 +39,36 @@ export const uploadRules = [
     trigger: 'onBlur'
   }
 ]
+
+// 手机rules
+export const mobileRules = [
+  {
+    validator: (value) => {
+      if (!value) {
+        return '必填'
+      } else if (!phoneReg.test(value)) {
+        return '请输入正确的手机号'
+      } else {
+        return Promise.resolve()
+      }
+    },
+    trigger: 'onBlur'
+  }
+]
+
+// swiftCode验证
+export function getSwiftCodeRules(code) {
+  return [{
+    validator: (value) => {
+      const _code = value.slice(4, 6)
+      if (!value) {
+        return '必填'
+      } else if ((value.length !== 8 && value.length !== 11) || _code !== code) {
+        return '请输入正确的SWIFT/BIC代码'
+      } else {
+        return Promise.resolve()
+      }
+    },
+    trigger: 'onBlur'
+  }]
+}

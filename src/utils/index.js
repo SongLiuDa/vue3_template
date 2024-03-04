@@ -1,20 +1,3 @@
-import { emailReg, phoneReg } from './reg'
-
-/**
- * @description: 字节大小转换
- * @param {Number} bytes 字节
- * @return {Sting} 格式化字节
- */
-export function formatBytes(bytes) {
-  if (bytes === 0) return '0 Bytes'
-  const k = 1024
-  const sizes = ['Bytes', 'KB', 'MB', 'GB', 'TB', 'PB', 'EB', 'ZB', 'YB']
-
-  const i = Math.floor(Math.log(bytes) / Math.log(k))
-
-  return parseFloat((bytes / Math.pow(k, i))) + '' + sizes[i]
-}
-
 /**
  * @description: 格式化金额
  * @param {string} s [金额]
@@ -38,11 +21,22 @@ export const formatMoney = function(s, n = 2) {
   }
   return `${minus}${t.split('').reverse().join('')}${n > 0 ? '.' + r : ''}`
 }
-// 是否是邮箱
-export function isEamil(s) {
-  return emailReg.test(s)
+/**
+ * @description: 格式化分隔符金额
+ * @param {string} s 分隔符金额
+ * @return {string}
+ */
+export function formatAmt (v) {
+  if (!v) return 0
+  v = v.toString()
+  return +v.replace(/[^\d\.]/g, '')
 }
-// 是否是手机
-export function isPhone(s) {
-  return phoneReg.test(s)
+/**
+ * @description: 币种对拆分
+ * @param {string} s 币种对
+ * @return {string}
+ */
+export function currencyPairFormat(s) {
+  if (!s) return
+  return { start: s.slice(0, 3), end: s.slice(-3) }
 }

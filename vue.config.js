@@ -3,7 +3,7 @@ const { resolve } = require('path')
 
 const isDev = process.env.NODE_ENV === 'development'
 module.exports = defineConfig({
-  publicPath: isDev ? '/' : '/siteverify',
+  publicPath: isDev ? '/' : '/h5',
   // 输出文件目录
   outputDir: 'dist',
   // 放置生成的静态资源 (js、css、img、fonts) 的 (相对于 outputDir 的) 目录。
@@ -12,7 +12,7 @@ module.exports = defineConfig({
   transpileDependencies: true,
   devServer: {
     host: '0.0.0.0',
-    port: 8891,
+    port: 9696,
     https: false,
     open: true, // 配置自动启动浏览器
     hot: true, // 局部刷新，不刷新整个页面
@@ -25,6 +25,7 @@ module.exports = defineConfig({
       }
     }
   },
+
   css: {
     loaderOptions: {
       css: {
@@ -47,6 +48,14 @@ module.exports = defineConfig({
     }
   },
   chainWebpack(config) {
+    config.plugin('define').tap((definitions) => {
+      Object.assign(definitions[0], {
+        __VUE_OPTIONS_API__: 'true',
+        __VUE_PROD_DEVTOOLS__: 'false',
+        __VUE_PROD_HYDRATION_MISMATCH_DETAILS__: 'false'
+      })
+      return definitions
+    })
     config.plugins.delete('preload')
     config.plugins.delete('prefetch')
     config.resolve.alias

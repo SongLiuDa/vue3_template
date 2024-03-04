@@ -8,7 +8,7 @@ import 'normalize.css/normalize.css'
 import '@/styles/index.scss'
 import './icons'
 
-import './permission'
+// import './permission'
 // rem
 import useRem from '@/utils/rem.js'
 // 全局组件

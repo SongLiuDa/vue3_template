@@ -1,49 +1,254 @@
-.app-form{
-  .van-cell{
-    padding: 0;
-    &::after{
-      display: none;
+.AppForm{
+  .form-item{
+    margin-bottom: .6rem;
+    .van-field__label{
+      width: 100%;
     }
-    .van-field__body{
-      height: .84rem;
-      line-height: .84rem;
-      border-radius: .1rem;
+    .label{
+      min-height: .36rem;
+      line-height: .36rem;
       font-size: .28rem;
-      caret-color: $blue;
-      transition: border-color .2s cubic-bezier(.645,.045,.355,1);
-      border:.01rem solid $colorCc;
-      // overflow: visible;
-      .van-field__control--custom{
-        padding: 0;
+      color: $color66;
+      margin-bottom: .2rem;
+      font-family: 'Arial-Bold';
+      .label-optional{
+        color: $color99;
       }
+    }
+    .van-field{
+      .van-field__body{
+        height: .96rem;
+        line-height: .96rem;
+        border-radius: .2rem; 
+        font-size: .28rem;
+        font-family: 'Arial-Bold', Arial;
+        transition: border-color .2s cubic-bezier(.645,.045,.355,1);
+        border:.02rem solid $color66;
+        overflow: hidden;
+        .van-field__control--custom{
+          padding: 0;
+        }
+        .van-field__clear{ // input清空按钮
+          color: $color99;
+          padding: 0 0.36rem;
+          font-size: .32rem;
+          margin-right: 0;
+          background: transparent !important;
+        }
+      }
+      &.textarea-wrapper{
+        .van-field__body{
+          padding: .2rem 0;
+          height: auto;
+          color: $color33;
+          font-weight: none;
+          line-height: .36rem;
+          border: none !important;
+          background: #fff;
+        }
+      }
+    }
+  }
+}
+.input-select-icon{
+  &.mini-select{
+    .van-badge__wrapper{
+      right: .20rem;
+    }
+  }
+  .van-field__right-icon{
+    margin-right: 0;
+  }
+  .van-badge__wrapper{
+    position: absolute;
+    right: .36rem;
+    top: .32rem;
+    line-height: 1;
+    transform-origin: center center;
+    transition: all .2s ease-in;
+    font-size: .32rem;
+    width: .32rem;
+    height: .32rem;
+  }
+}
+.van-field{
+  padding: 0;
+  background: transparent;
+  &:active{
+    background: transparent;
+  }
+  &::after{
+    display: none;
+  }
+  input.van-field__control,
+  textarea.van-field__control{
+    border-radius: inherit;
+    color: $color33 !important;
+    padding: 0 .36rem;
+    &::-webkit-input-placeholder{
+      color:$colorCc;
+      font-size: .28rem;
+      font-family: 'Arial-Regular';
+    }
+  }
+  .van-field__button{
+    padding-right: .36rem;
+  }
+  &.van-field--disabled{
+    .van-field__body{
+      border-color: #D9D9D9 !important;
+      background: #ECECEC !important;
     }
     .van-field__control{
-      border-radius: inherit;
-      color: $color66 !important;
-      padding: 0 .4rem;
-      &::-webkit-input-placeholder{
-        color:$colorCc;
-        font-size: .28rem;
+      color: $color99 !important;
+    }
+  }
+  &.van-field--error{
+    .van-field__body{
+      border-color: $red !important;
+    }
+  }
+  &.custom-field{ // van-field #input
+    .van-field__body{
+      background: transparent;
+      border-radius: 0 !important;
+      border: none !important;
+      height: auto !important;
+    }
+  }
+  .van-field__error-message{
+    font-size: .24rem;
+    font-family: 'Arial-Regular';
+    line-height: .30rem;
+    padding-left: .36rem;
+    padding-top: .08rem;
+    color: $red;
+  }
+}
+// van-checkbox
+.van-checkbox{
+  .van-checkbox__icon{
+    font-size: .38rem;
+    .van-icon{
+      border-color: $blue;
+    }
+    &.van-checkbox__icon--checked{
+      .van-icon{
+        background-color: $blue;
       }
     }
-    &.van-field--error{
-      .van-field__body{
-        border-color: $red;
-      }
+  }
+  .van-checkbox__label{
+    margin-left: .12rem;
+    font-size: .24rem;
+    line-height: .38rem;
+    color: $color99;
+  }
+  &.is-agree{ // 自定义类名--用于协议
+    align-items: flex-start;
+  }
+  &.mini{
+    .van-checkbox__icon{
+      font-size: .30rem;
     }
-    &.custom-field{ // van-field #input
-      .van-field__body{
-        background: transparent;
-        border-radius: 0;
-        border: none;
-        height: auto;
-      }
+  }
+}
+// van-picker
+.van-picker{
+  &.not-cancel{
+    .van-picker__cancel{
+      display: none;
     }
-    .van-field__error-message{
+    .van-picker__title{
+      flex: 1;
+      margin-left: 88px;
+      text-align: center;
+    }
+  }
+  .van-picker__toolbar{
+    .van-picker__cancel{
       font-size: .24rem;
-      line-height: .32rem;
-      padding-top: .12rem;
-      color: $red;
+      line-height: 1;
+      color: rgba(0,0,0,0.6);
+    }
+    .van-picker__title{
+      color: $color33;
+      font-family: 'Arial-Bold';
+      font-size: .28rem;
+      line-height: .3rem;
+    }
+    .van-picker__confirm{
+      font-size: .28rem;
+      line-height: 1;
+      color: $blue;
+      border: 1px solid $blue !important;
+      color: $blue !important;
+      height: .6rem;
+      line-height: .6rem;
+      border-radius: .42rem;
+      margin-right: 16px;
+    }
+  }
+  .van-picker__columns{
+    .van-picker-column__item{
+      padding-left: .3rem;
+      padding-right: .3rem;
+      color: $color66;
+      font-size: .28rem;
+      // &.van-picker-column__item--selected{
+      //   color: $color66;
+      // }
+    }
+  } 
+  .van-loading{
+    color: $blue;
+  }
+}
+
+// van-toast
+.van-toast.van-popup{
+  padding: .24rem;
+  font-size: .28rem;
+  line-height: .38rem;
+  word-break:normal;
+}
+// van-notify
+.van-notify.van-popup{
+  padding: .16rem .32rem;
+  font-size: .28rem;
+  line-height: .38rem;
+}
+.popup-checkbox{
+  .van-checkbox{
+    .van-checkbox__icon{
+      font-size: .36rem;
+      line-height: auto;
+    }
+    .van-badge__wrapper{
+      background: transparent !important;
+      width: 0.36rem !important;
+      height: .36rem !important;
+      border-color: $color33 !important;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      &::before{
+        content: '';
+        display: block;
+        width: 0;
+        height: 0;
+        background: $color33;
+        border-radius: 50%;
+        transition: all .28s ease-in-out;
+      }
+    }
+    .van-checkbox__icon--checked{
+      .van-badge__wrapper{
+        &::before{
+          width: .24rem;
+          height: .24rem;
+        }
+      }
     }
   }
 }

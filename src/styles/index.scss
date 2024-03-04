@@ -9,10 +9,10 @@ body {
 	-moz-osx-font-smoothing: grayscale;
 	-webkit-font-smoothing: antialiased;
   text-rendering: optimizeLegibility;
-  font-family: 'PingFang SC',tahoma,'Hiragino Sans GB','Microsoft YaHei','Helvetica Neue',Helvetica,'Arial-Regular';
-  background: #f5f5f5;
+  font-family: 'PingFang SC',tahoma,'Hiragino Sans GB','Microsoft YaHei','Helvetica Neue',Helvetica,Arial,sans-serif;
+  background: $baseBg;
   line-height: 1.5;
-  font-size: 16px;
+  font-size: .28rem;
   color: #666;
 }   
 
@@ -66,6 +66,8 @@ a:active {
   outline: none;
 }
 button {
+  background: transparent;
+  padding: 0;
 	border: none;
 	outline: none;
 }
@@ -86,12 +88,13 @@ li:focus {
 
 /*浏览器自带选择颜色*/ 
 input:-webkit-autofill{
-  box-shadow: 0 0 0px 1000px $colorEf inset !important;
+  box-shadow: 0 0 0 1000px $baseBg inset!important;
+  -webkit-text-fill-color: $color33;
 }
 
 select:-webkit-autofill{
-  box-shadow: 0 0 0px 1000px $colorEf inset !important;
+  box-shadow: 0 0 0px 1000px $baseBg inset !important;
 }
 textarea:-webkit-autofill{
-  box-shadow: 0 0 0px 1000px $colorEf inset !important;
+  box-shadow: 0 0 0px 1000px $baseBg inset !important;
 } 
